@@ -1,14 +1,33 @@
-const express = require("express");
+const app = require("./app");
+const { sequelize, syncDatabase } = require("./models");
 
-const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 5000;
 
-// route
-app.get("/", (req, res) => {
-  res.send("Backend is running successfully 🚀");
-});
+// database connection
+const startServer = async () => {
+  try {
+    // connection testing
+    await sequelize.authenticate();
+    console.log("Database connection successful");
 
-// start server
-app.listen(PORT, () => {
-  console.log(`Server started on http://localhost:${PORT}`);
+    // await syncDatabase();
+
+    // start server
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Unable to start server:", err);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+//  shutdown
+process.on("SIGTERM", async () => {
+  console.log("SIGTERM received, closing server...");
+  await sequelize.close();
+  console.log("Database connection closed");
+  process.exit(0);
 });

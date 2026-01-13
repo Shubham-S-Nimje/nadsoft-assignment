@@ -1,8 +1,13 @@
-#root {
-  max-width: 1280px;
+/* #root {
+  max-width: 90%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+} */
+
+#root {
+  background-color: rgb(223, 234, 236);
+  min-height: 100vh; /* ensures full viewport coverage */
 }
 
 .logo {
